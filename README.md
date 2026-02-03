@@ -40,6 +40,9 @@ If you want to use command-line tools, please ensure you have access to a Unix-b
 
 ## Precourse material - read/watch at your leisure 
 
+Training material for pathogen detection using nanopore reads
+- [Pathogen detection from (direct Nanopore) sequencing data using Galaxy - Foodborne Edition](https://training.galaxyproject.org/training-material/topics/microbiome/tutorials/pathogen-detection-from-nanopore-foodborne-data/tutorial.html#pathogen-detection-from-direct-nanopore-sequencing-data-using-ga)
+
 Optional Videos to watch before the course starts:
 - [A brief history of Computational Biology and Sequencing](https://youtu.be/idl6oq-MxbM?si=A3ShRWdwoVkjgXqk&t=575)
 - [Introduction to Galaxy](https://www.youtube.com/watch?v=64oS5uXVRV0)
