@@ -73,6 +73,9 @@ conda install -c bioconda fastqc multiqc nanoplot porechop fastp minimap2 samtoo
 
 # Install additional tools
 conda install -c conda-forge wget curl csvtk parallel -y
+
+# Install amrfinderplus separately
+conda install -y -c conda-forge -c bioconda --strict-channel-priority ncbi-amrfinderplus
 ```
 
 ### Method 2: Using environment.yml file
