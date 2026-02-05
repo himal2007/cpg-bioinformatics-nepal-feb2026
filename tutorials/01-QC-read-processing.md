@@ -621,6 +621,7 @@ firefox analysis/krona/barcode11_babykraken_krona.html &
 * Large segments = abundant taxa
 * Many small segments = diverse community
 * Compare between samples to identify differences
+  
 ---
 
 ## Additional Resources
