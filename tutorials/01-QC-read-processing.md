@@ -1,4 +1,4 @@
-# Tutorial 1: Quality control of Nanopore Reads and processing of reads
+# Tutorial 1: Quality control of Nanopore Reads, processing of reads, and taxonomic profiling
 
 Learn to assess and visualise the quality of Oxford Nanopore sequencing data using FastQC, MultiQC, and NanoPlot and perform adapter trimming and quality filtering with Porechop and Fastp.
 
@@ -423,12 +423,6 @@ firefox analysis/qc/fastqc_raw/barcode10_fastqc.html \
         analysis/qc/fastqc_filtered/barcode10_filtered_fastqc.html &
 ```
 
-**Expected improvements:**
-- ✅ Higher mean quality scores
-- ✅ More uniform quality distribution
-- ✅ Tighter read length distribution
-- ✅ Fewer low-quality reads
-
 ---
 
 ## Step 8: Comprehensive MultiQC Report
@@ -499,6 +493,134 @@ Read Length After Filtering:
     └─ Mean < 500bp → ✗ Too short for bacterial genomics
 ```
 
+---
+
+## Step 9: Taxonomic profiling with Kraken2 (BabyKraken database)
+
+**What is Kraken2?**
+
+* Ultra-fast taxonomic classifier for metagenomic sequences
+* Assigns taxonomic labels to sequences based on exact k-mer matches
+* BabyKraken: Small database (~10 MB) for quick testing and limited resources
+* Standard database: Comprehensive (~16 GB) for production analyses
+
+**Why start with BabyKraken?**
+
+* Faster processing
+* Lower memory requirements
+* Good for learning and testing
+* ⚠️ May miss some species (smaller database)
+
+### Run Kraken2 with BabyKraken
+
+```bash
+# Create output directory
+mkdir -p analysis/kraken2/babykraken/
+
+# Run Kraken2 on filtered reads
+cat reads_paths.tab \
+  | parallel -j 1 --colsep '\t' \
+    'kraken2 \
+       --db databases/kraken2/babykraken \
+       --threads 8 \
+       --report analysis/kraken2/babykraken/{1}_report.txt \
+       --output analysis/kraken2/babykraken/{1}_output.txt \
+       --memory-mapping \
+       analysis/qc/fastp/{1}_filtered.fastq.gz'
+```
+
+**Command explanation:**
+
+* `--db databases/kraken2/babykraken`: Path to BabyKraken database
+* `--threads 8`: Number of parallel threads
+* `--report`: Summary report with taxonomic breakdown
+* `--output`: Detailed per-read classification
+* Input: Quality-filtered FASTQ files
+
+### Check Kraken2 output
+
+```bash
+# List generated files
+ls -lh analysis/kraken2/babykraken/
+
+# View classification summary
+echo "=== Kraken2 BabyKraken Classification Summary ==="
+for sample in barcode10 barcode11; do
+  echo ""
+  echo "Sample: $sample"
+  head -20 analysis/kraken2/babykraken/${sample}_report.txt
+done
+```
+
+**Understanding the Kraken2 report:**
+
+Report columns:
+
+* % of reads: Percentage of reads assigned to this taxon
+* reads (clade): Number of reads in this clade (including children)
+* reads (taxon): Number of reads assigned directly to this taxon
+* Rank: Taxonomic rank (D=domain, P=phylum, C=class, O=order, F=family, G=genus, S=species)
+* NCBI Tax ID: NCBI taxonomy identifier
+* Scientific name: Name of the taxon
+
+**What to look for:**
+
+* Unclassified %: <20% is good, >50% may indicate novel organism or poor quality
+* Top species: Should match expected pathogen
+* Read distribution: Concentrated in one or few species vs dispersed
+
+---
+
+## Step 10: Krona visualization (BabyKraken Results)
+
+**What is Krona?**
+
+* Interactive HTML visualisations of taxonomic composition
+* Hierarchical pie charts (domain → phylum → genus → species)
+* Allows exploration of metagenomic results
+
+### Generate Krona plots
+
+```bash
+# Create output directory
+mkdir -p analysis/krona/
+
+# Convert Kraken2 reports to Krona HTML
+cat reads_paths.tab \
+  | parallel -j 1 --colsep '\t' \
+    'ktImportTaxonomy \
+       -q 2 -t 3 \
+       analysis/kraken2/babykraken/{1}_output.txt \
+       -o analysis/krona/{1}_babykraken_krona.html'
+```
+
+**Command explanation:**
+
+* `ktImportTaxonomy`: Krona tool for importing taxonomy data
+* `-q 2`: Query ID column (column 2 in Kraken2 output)
+* `-t 3`: Taxonomy ID column (column 3 in Kraken2 output)
+* `-o`: Output HTML file
+
+### View Krona visualizations
+
+```bash
+# Open Krona HTML in browser
+firefox analysis/krona/barcode10_babykraken_krona.html &
+firefox analysis/krona/barcode11_babykraken_krona.html &
+```
+
+**How to use Krona:**
+
+* Click on segments: Zoom into specific taxonomic levels
+* Hover: See exact read counts and percentages
+* Click center: Zoom back out
+* Color: Represents different taxa
+
+**Interpretation tips:**
+
+* Large segments = abundant taxa
+* Many small segments = diverse community
+* Compare between samples to identify differences
 ---
 
 ## Additional Resources
