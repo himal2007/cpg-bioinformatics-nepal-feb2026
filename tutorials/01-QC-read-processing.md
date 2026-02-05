@@ -15,6 +15,8 @@ By the end of this tutorial, you will:
 - Process reads with Porechop and Fastp for adapter trimming and quality filtering 
 - Aggregate reports with MultiQC
 - Interpret quality metrics to assess data suitability
+- Perform taxonomic profiling with Kraken2
+- Visualise taxonomic composition with Krona
 
 ---
 
@@ -194,17 +196,247 @@ firefox analysis/qc/nanoplot_raw/barcode10/barcode10_NanoPlot-report.html &
 | **N50** | 50% of bases in reads ≥ this length | 3,000+ bp |
 | **Total bases** | Total sequencing output | 200 Mb+ |
 
-### Quick Stats Summary
+---
+
+## Step 5: Porechop - adapter trimming [Takes time]
+
+**What is Porechop?**
+- Removes Oxford Nanopore adapter sequences from reads
+- Finds and trims adapters at read ends and internal adapters (chimeras)
+- Essential for accurate downstream analysis
+
+**Why remove adapters?**
+- Adapters are synthetic sequences added during library preparation
+- Can interfere with alignment and assembly
+- Cause false positive matches
+- Should be removed before analysis
+
+
+### Run Porechop
 
 ```bash
-# Extract key statistics from NanoPlot
-echo "=== Read Statistics Summary ==="
+# Create output directory
+mkdir -p analysis/qc/porechop/
+
+# Run one sample first to understand the process
+porechop -i data/raw_reads/barcode10.fastq.gz -o analysis/qc/porechop/barcode10_trimmed.fastq.gz -t 8
+porechop -i data/raw_reads/barcode11.fastq.gz -o analysis/qc/porechop/barcode11_trimmed.fastq.gz -t 8
+
+
+# Run Porechop on all samples in parallel
+# cat reads_paths.tab | parallel -j 1 --colsep '\t' 'porechop -i {2} -o analysis/qc/porechop/{1}_trimmed.fastq.gz -t 8'
+# parallel --progress : Show progress bar (optional, may slow down processing)
+# parallel --line-buffer : Buffer output line by line (optional, may slow down processing)
+
+```
+
+**Command explanation:**
+```bash
+porechop \
+  -i input.fastq.gz           # Input FASTQ file
+  -o output_trimmed.fastq.gz  # Output file (automatically compressed)
+  -t 8                        # Number of threads
+```
+
+**Default Porechop behavior:**
+- Searches for known ONT adapters at read ends
+- Trims adapters when found
+- Splits reads if internal adapters detected (chimeras)
+- Discards very short reads (<1000 bp by default)
+
+### Check Porechop Output
+
+```bash
+# View Porechop statistics (printed to terminal)
+# Look for lines like:
+# "Trimming adapters from read ends"
+# "Splitting reads with internal adapters"
+# "X reads had adapters trimmed from their start"
+# "Y reads had adapters trimmed from their end"
+
+# Count reads before and after
+echo "=== Porechop Results ==="
 for sample in barcode10 barcode11; do
-  echo ""
   echo "Sample: $sample"
-  grep -E "Number of reads|Mean read length|Mean read quality|Read length N50" \
-    analysis/qc/nanoplot_raw/${sample}/${sample}_NanoStats.txt
+  raw=$(zcat data/raw_reads/${sample}.fastq.gz | echo $((`wc -l`/4)))
+  trimmed=$(zcat analysis/qc/porechop/${sample}_trimmed.fastq.gz | echo $((`wc -l`/4)))
+  echo "  Raw reads: $raw"
+  echo "  Trimmed reads: $trimmed"
+  echo "  Retained: $(echo "scale=1; $trimmed*100/$raw" | bc)%"
+  echo ""
+done
+
+# List trimmed files
+ls -lh analysis/qc/porechop/
+
+# Compare file sizes (trimmed should be slightly smaller)
+echo "=== File size comparison ==="
+echo "Raw reads:"
+du -h data/raw_reads/*.fastq.gz
+echo ""
+echo "Trimmed reads:"
+du -h analysis/qc/porechop/*.fastq.gz
+```
+
+**What to expect:**
+- Most reads (95-99%) should pass through
+- 1-5% may have adapters trimmed
+- Small number of chimeric reads may be split
+- Very few reads should be discarded
+
+---
+
+## Step 6: Fastp - Quality filtering and length filtering
+
+**What is Fastp?**
+- All-in-one preprocessing tool for FASTQ files
+- Performs quality filtering, length filtering, adapter trimming
+- Generates comprehensive HTML reports
+- Much faster than traditional tools (multithreaded)
+
+**Why quality filter?**
+- Remove low-quality reads that may introduce errors
+- Filter very short reads (less informative)
+- Improve downstream analysis accuracy
+- Reduce computational time by removing poor data
+
+### Run Fastp
+
+```bash
+# Create output directory
+mkdir -p analysis/qc/fastp/
+
+# Run one sample first
+fastp \
+  -i analysis/qc/porechop/barcode10_trimmed.fastq.gz \
+  -o analysis/qc/fastp/barcode10_filtered.fastq.gz \
+  --qualified_quality_phred 10 \
+  --length_required 500 \
+  --thread 8 \
+  --html analysis/qc/fastp/barcode10_fastp.html \
+  --json analysis/qc/fastp/barcode10_fastp.json
+
+# Run on all samples in parallel
+cat reads_paths.tab \
+  | parallel -j 1 --colsep '\t' \
+    'fastp \
+       -i analysis/qc/porechop/{1}_trimmed.fastq.gz \
+       -o analysis/qc/fastp/{1}_filtered.fastq.gz \
+       --qualified_quality_phred 10 \
+       --length_required 500 \
+       --thread 8 \
+       --html analysis/qc/fastp/{1}_fastp.html \
+       --json analysis/qc/fastp/{1}_fastp.json'
+```
+
+**Command explanation:**
+```bash
+fastp \
+  -i input.fastq.gz                    # Input file
+  -o output_filtered.fastq.gz          # Output file
+  --qualified_quality_phred 10         # Minimum quality score (Q10)
+  --length_required 500                # Minimum read length (500 bp)
+  --thread 8                           # Number of threads
+  --html report.html                   # HTML report
+  --json report.json                   # JSON report (for MultiQC)
+```
+
+**Parameter choices explained:**
+
+| Parameter | Value | Why? |
+|-----------|-------|------|
+| `--qualified_quality_phred 10` | Q10 | Nanopore reads: Q10 acceptable, Q7 minimum |
+| `--length_required 500` | 500 bp | Remove very short reads; adjust based on needs |
+| `--thread 8` | 8 threads | Speed up processing |
+
+**Adjust parameters based on your needs:**
+- **More stringent**: `-q 12 -l 1000` (higher quality, longer reads)
+- **Less stringent**: `-q 7 -l 300` (keep more reads, lower quality)
+- **For assembly**: Consider `-l 1000` or higher
+- **For taxonomy**: `-l 500` is usually sufficient
+
+### View Fastp Reports
+
+```bash
+# Open HTML report in browser
+firefox analysis/qc/fastp/barcode10_fastp.html &
+
+# Or list all reports
+ls -lh analysis/qc/fastp/*.html
+```
+
+**What to look for in Fastp report:**
+
+**Before filtering section:**
+- Total reads and bases
+- Quality distribution
+- Length distribution
+
+**After filtering section:**
+- Reads passing filters (should be 70-95%)
+- Quality improvement
+- Length distribution after filtering
+
+**Filtering result:**
+- Number of reads with low quality (removed)
+- Number of reads too short (removed)
+- Percentage of reads passed
+
+### Check Fastp Statistics
+
+```bash
+echo "=== Fastp Filtering Results ==="
+for sample in barcode10 barcode11; do
+  echo "Sample: $sample"
+  
+  # Extract statistics from JSON
+  total_reads=$(grep '"total_reads"' analysis/qc/fastp/${sample}_fastp.json | head -1 | awk '{print $2}' | tr -d ',')
+  filtered_reads=$(grep '"total_reads"' analysis/qc/fastp/${sample}_fastp.json | tail -1 | awk '{print $2}' | tr -d ',')
+  
+  echo "  Before filtering: $total_reads reads"
+  echo "  After filtering: $filtered_reads reads"
+  echo "  Retained: $(echo "scale=1; $filtered_reads*100/$total_reads" | bc)%"
+  echo ""
 done
 ```
 
+**Expected retention:**
+- Good quality data: 80-95% reads retained
+- Acceptable: 70-80% retained
+- Poor quality: <70% retained (may need to relax parameters)
+
 ---
+
+## Decision Tree: Proceed or Re-process?
+
+```
+Quality Check After Processing:
+    ├─ ≥70% reads retained → ✓ Good, proceed to next step
+    ├─ 50-70% retained → ⚠ Acceptable, note in report
+    ├─ <50% retained → ✗ Poor quality
+    │   └─ Options:
+    │       ├─ Relax filtering parameters
+    │       ├─ Check raw data quality
+    │       └─ Consider re-sequencing
+
+Read Quality After Filtering:
+    ├─ Mean Q ≥ 10 → ✓ Good
+    ├─ Mean Q 7-10 → ⚠ Acceptable
+    └─ Mean Q < 7 → ✗ Poor quality, reconsider parameters
+
+Read Length After Filtering:
+    ├─ Mean ≥ 2kb → ✓ Excellent for assembly
+    ├─ Mean 1-2kb → ✓ Good for most analyses
+    ├─ Mean 500-1kb → ⚠ OK for taxonomy, challenging for assembly
+    └─ Mean < 500bp → ✗ Too short for bacterial genomics
+```
+
+---
+
+## Additional Resources
+
+- [Porechop documentation](https://github.com/rrwick/Porechop)
+- [Fastp publication](https://academic.oup.com/bioinformatics/article/34/17/i884/5093234)
+- [Kraken2 manual](https://github.com/DerrickWood/kraken2/wiki)
+- [Krona tools](https://github.com/marbl/Krona)
+- [MultiQC documentation](https://seqera.io/multiqc/)
