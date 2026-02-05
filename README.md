@@ -37,7 +37,8 @@ If you want to use command-line tools, please ensure you have access to a Unix-b
 
 1. **Install WSL** (Windows users): Follow [WSL installation guide](docs/01-wsl-installation.md)
 2. **Setup Conda Environment**: Follow [`conda` setup guide](docs/02-conda-environment-setup.md)
-
+3. **Download data and databases**: Follow [Data Download Guide](docs/03-data-download.md)
+4. 
 ## Precourse material - read/watch at your leisure 
 
 Training material for pathogen detection using nanopore reads
