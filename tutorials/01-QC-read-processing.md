@@ -311,7 +311,7 @@ fastp \
   -i analysis/qc/porechop/barcode10_trimmed.fastq.gz \
   -o analysis/qc/fastp/barcode10_filtered.fastq.gz \
   --qualified_quality_phred 10 \
-  --length_required 500 \
+  --disable_trim_poly_g \
   --thread 8 \
   --html analysis/qc/fastp/barcode10_fastp.html \
   --json analysis/qc/fastp/barcode10_fastp.json
@@ -323,7 +323,7 @@ cat reads_paths.tab \
        -i analysis/qc/porechop/{1}_trimmed.fastq.gz \
        -o analysis/qc/fastp/{1}_filtered.fastq.gz \
        --qualified_quality_phred 10 \
-       --length_required 500 \
+       --disable_trim_poly_g \
        --thread 8 \
        --html analysis/qc/fastp/{1}_fastp.html \
        --json analysis/qc/fastp/{1}_fastp.json'
@@ -335,19 +335,11 @@ fastp \
   -i input.fastq.gz                    # Input file
   -o output_filtered.fastq.gz          # Output file
   --qualified_quality_phred 10         # Minimum quality score (Q10)
-  --length_required 500                # Minimum read length (500 bp)
+  --disable_trim_poly_g                # Disable poly-G trimming (not needed for nanopore)
   --thread 8                           # Number of threads
   --html report.html                   # HTML report
   --json report.json                   # JSON report (for MultiQC)
 ```
-
-**Parameter choices explained:**
-
-| Parameter | Value | Why? |
-|-----------|-------|------|
-| `--qualified_quality_phred 10` | Q10 | Nanopore reads: Q10 acceptable, Q7 minimum |
-| `--length_required 500` | 500 bp | Remove very short reads; adjust based on needs |
-| `--thread 8` | 8 threads | Speed up processing |
 
 **Adjust parameters based on your needs:**
 - **More stringent**: `-q 12 -l 1000` (higher quality, longer reads)
@@ -390,7 +382,8 @@ for sample in barcode10 barcode11; do
   echo "Sample: $sample"
   
   # Extract statistics from JSON
-  total_reads=$(grep '"total_reads"' analysis/qc/fastp/${sample}_fastp.json | head -1 | awk '{print $2}' | tr -d ',')
+  # total_reads=$(grep '"total_reads"' analysis/qc/fastp/${sample}_fastp.json | head -1 | awk '{print $2}' | tr -d ',')
+  total_reads=$(grep '"total_reads"' analysis/qc/fastp/${sample}_fastp.json | head -1 | awk -F':' '{print $2}' | tr -d ' ,')
   filtered_reads=$(grep '"total_reads"' analysis/qc/fastp/${sample}_fastp.json | tail -1 | awk '{print $2}' | tr -d ',')
   
   echo "  Before filtering: $total_reads reads"
@@ -404,6 +397,81 @@ done
 - Good quality data: 80-95% reads retained
 - Acceptable: 70-80% retained
 - Poor quality: <70% retained (may need to relax parameters)
+
+---
+
+## Step 7: FastQC on processed reads [Challenge]
+
+Now let's check the quality of our processed reads to verify improvement.
+
+```bash
+# Create output directory
+mkdir -p analysis/qc/fastqc_filtered/
+
+# Run FastQC on filtered reads
+cat reads_paths.tab \
+  | parallel -j 1 --colsep '\t' \
+    'fastqc analysis/qc/fastp/{1}_filtered.fastq.gz \
+       -o analysis/qc/fastqc_filtered -t 8'
+```
+
+### Compare Raw vs Filtered Quality
+
+```bash
+# Open both reports side-by-side
+firefox analysis/qc/fastqc_raw/barcode10_fastqc.html \
+        analysis/qc/fastqc_filtered/barcode10_filtered_fastqc.html &
+```
+
+**Expected improvements:**
+- ✅ Higher mean quality scores
+- ✅ More uniform quality distribution
+- ✅ Tighter read length distribution
+- ✅ Fewer low-quality reads
+
+---
+
+## Step 8: Comprehensive MultiQC Report
+
+Aggregate all QC reports (raw, Porechop, Fastp, filtered) into one comprehensive report.
+
+```bash
+# Create comprehensive MultiQC report
+cd analysis/qc/
+multiqc . -o multiqc_comprehensive/ --force
+
+# Return to project root
+cd ~/nanopore_training
+```
+
+**This MultiQC report includes:**
+- FastQC results (raw and filtered)
+- Fastp filtering statistics
+- Before/after comparison
+- Sample-wise comparison
+
+### View Comprehensive Report
+
+```bash
+# Open comprehensive MultiQC report
+firefox analysis/qc/multiqc_comprehensive/multiqc_report.html &
+```
+
+**Key sections to review:**
+
+**General Statistics table:**
+- Shows all samples with read counts before/after filtering
+- Quality metrics
+- Percentage retained
+
+**FastQC sections:**
+- Compare raw vs filtered quality
+- Check for improvements
+
+**Fastp section:**
+- Filtering statistics
+- Quality before/after
+- Length distribution changes
 
 ---
 
