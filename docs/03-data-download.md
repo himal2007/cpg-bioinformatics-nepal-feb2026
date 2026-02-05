@@ -71,6 +71,7 @@ wget https://zenodo.org/record/11222469/files/preprocessed_sample_barcode11_spik
 # verify downloads
 ls -lh
 ```
+
 ## Downloading reference genomes - Chicken reference genome (galGal6)
 
 For host filtering, we need the chicken reference genome:
@@ -84,6 +85,19 @@ wget https://hgdownload.soe.ucsc.edu/goldenPath/galGal6/bigZips/galGal6.fa.gz
 
 # Verify download
 ls -lh
+```
+
+### Download assembled genomes
+
+If we can't go through assembly steps, we can download pre-assembled genomes for the *Salmonella* subspecies:
+
+```bash
+# Navigate to references directory
+cd ~/nanopore_training/data/assembly/
+# Download assembled genome for subsp. enterica
+wget https://zenodo.org/record/11222469/files/Contigs_Barcode10.fasta
+# Download assembled genome for subsp. houtenae
+wget https://zenodo.org/record/11222469/files/Contigs_Barcode11.fasta
 ```
 
 ## Downloading kraken2 databases
