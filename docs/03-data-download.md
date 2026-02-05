@@ -122,12 +122,13 @@ ls -lh babykraken/
 # - taxo.k2d
 ```
 
-### Alternative: Standard Kraken2 Database
+### [OPTIONAL]: Standard Kraken2 database
 
-If you have more storage and want a comprehensive database:
+!!!**WARNING**!!!
+This takes a long time to download and requires more storage, but provides comprehensive coverage.
 
 ```bash
-# Download standard 16GB database (~16GB compressed, ~50GB uncompressed)
+# Download standard 16GB database (~13GB compressed, ~16GB uncompressed)
 cd ~/nanopore_training/databases/kraken2/
 
 # Create directory
@@ -139,7 +140,7 @@ cd standard_16gb
 curl -C - -O https://genome-idx.s3.amazonaws.com/kraken/k2_standard_16gb_20241228.tar.gz 
 
 # Extract
-tar -xzf k2_standard_16gb_20241228.tar.gz
+tar -xvzf k2_standard_16gb_20241228.tar.gz
 
 # Clean up compressed file
 # rm k2_standard_16gb_20241228.tar.gz
