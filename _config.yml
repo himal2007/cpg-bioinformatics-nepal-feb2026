@@ -3,3 +3,11 @@ logo: /logo.png
 title: CPG Bioinformatics Nepal Training Feb 2026
 google_analytics:
 description: Hands-on training for analysing Oxford Nanopore Technologies (ONT) sequencing data for microbial pathogen detection
+
+# Markdown settings for better code blocks
+markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
