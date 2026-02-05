@@ -571,7 +571,7 @@ Report columns:
 
 ---
 
-## Step 10: Krona visualization (BabyKraken Results)
+## Step 10: Krona visualisation (BabyKraken Results)
 
 **What is Krona?**
 
@@ -621,7 +621,128 @@ firefox analysis/krona/barcode11_babykraken_krona.html &
 * Large segments = abundant taxa
 * Many small segments = diverse community
 * Compare between samples to identify differences
-  
+
+---
+
+## Step 11: Taxonomic Profiling with Kraken2 (standard database) [takes a lot of time - run at your free time]
+
+Now let's run the same samples with the more comprehensive standard Kraken2 database.
+
+Standard database advantages:
+
+* More complete taxonomic coverage
+* Better species-level resolution
+* Includes more reference genomes
+* Requires more memory and time
+
+### Run Kraken2 with standard database 
+
+```bash
+# Create output directory
+mkdir -p analysis/kraken2/standard/
+
+# Run Kraken2 on filtered reads
+cat reads_paths.tab \
+  | parallel -j 1 --colsep '\t' \
+    'kraken2 \
+       --db databases/kraken2/standard_16gb \
+       --threads 8 \
+       --report analysis/kraken2/standard/{1}_report.txt \
+       --output analysis/kraken2/standard/{1}_output.txt \
+       --memory-mapping \
+       analysis/qc/fastp/{1}_filtered.fastq.gz'
+```
+
+**Check standard database output**
+
+```bash
+# View classification summary
+echo "=== Kraken2 Standard Database Classification Summary ==="
+for sample in barcode10 barcode11; do
+  echo ""
+  echo "Sample: $sample"
+  head -20 analysis/kraken2/standard/${sample}_report.txt
+done
+```
+
+---
+
+## Step 12: Krona visualisation and database comparison
+
+### Generate Krona plots for Standard database results
+
+```bash
+# Convert Kraken2 Standard reports to Krona HTML
+cat reads_paths.tab \
+    | parallel -j 1 --colsep '\t' \
+        'ktImportTaxonomy \
+             -q 2 -t 3 \
+             analysis/kraken2/standard/{1}_output.txt \
+             -o analysis/krona/{1}_standard_krona.html'
+```
+
+### View and compare visualisations
+
+```bash
+# Open both Krona visualisations side by side
+firefox analysis/krona/barcode10_babykraken_krona.html &
+firefox analysis/krona/barcode10_standard_krona.html &
+```
+
+### Systematic comparison of database results
+
+```bash
+# Create a comparison summary
+echo "=== Database Comparison Summary ===" > analysis/kraken2/database_comparison.txt
+
+for sample in barcode10 barcode11; do
+    echo "" >> analysis/kraken2/database_comparison.txt
+    echo "================================" >> analysis/kraken2/database_comparison.txt
+    echo "Sample: $sample" >> analysis/kraken2/database_comparison.txt
+    echo "================================" >> analysis/kraken2/database_comparison.txt
+    
+    echo "" >> analysis/kraken2/database_comparison.txt
+    echo "--- BabyKraken ---" >> analysis/kraken2/database_comparison.txt
+    head -15 analysis/kraken2/babykraken/${sample}_report.txt >> analysis/kraken2/database_comparison.txt
+    
+    echo "" >> analysis/kraken2/database_comparison.txt
+    echo "--- Standard Database ---" >> analysis/kraken2/database_comparison.txt
+    head -15 analysis/kraken2/standard/${sample}_report.txt >> analysis/kraken2/database_comparison.txt
+done
+
+# View comparison
+cat analysis/kraken2/database_comparison.txt
+```
+
+### Extract top species from both databases
+
+```bash
+# Extract species-level classifications
+echo "=== Top Species Identified ===" 
+
+for sample in barcode10 barcode11; do
+    echo ""
+    echo "Sample: $sample"
+    echo ""
+    echo "BabyKraken top species:"
+    grep -P "\sS\s" analysis/kraken2/babykraken/${sample}_report.txt | sort -k1 -nr | head -5
+    echo ""
+    echo "Standard database top species:"
+    grep -P "\sS\s" analysis/kraken2/standard/${sample}_report.txt | sort -k1 -nr | head -5
+done
+```
+
+### Expected differences between databases
+
+| Aspect | BabyKraken | Standard Database |
+|--------|------------|-------------------|
+| **Database size** | ~10 MB | ~16 GB |
+| **Species coverage** | Limited, common organisms | Comprehensive, including rare species |
+| **Classification rate** | Lower (more unclassified) | Higher (fewer unclassified) |
+| **Processing speed** | Faster | Slower |
+| **Memory usage** | Lower (~1-2 GB) | Higher (~16 GB) |
+| **Best for** | Quick screening, testing | Production analyses, publications |
+
 ---
 
 ## Additional Resources
