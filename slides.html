@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPG Bioinformatics Workshop Nepal - Feb 2026</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/sky.css">
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+        .reveal h1 { font-size: 2.5em; color: #2a76dd; }
+        .reveal h2 { font-size: 1.8em; color: #3887be; }
+        .reveal ul { font-size: 0.9em; }
+        .reveal li { margin: 15px 0; }
+        .emoji { font-style: normal; }
+        .highlight { color: #e74c3c; font-weight: bold; }
+        .reveal .footer { 
+            position: absolute; 
+            bottom: 10px; 
+            left: 10px; 
+            font-size: 0.6em; 
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Slide 1: Title -->
+            <section data-background-gradient="linear-gradient(to bottom, #4e54c8, #8f94fb)">
+                <h1 style="color: white;">🦠 Bioinformatics Training</h1>
+                <h2 style="color: white;">Nanopore Pathogen Detection</h2>
+                <p style="color: white; font-size: 1.2em; margin-top: 50px;">CPG Workshop Nepal - February 2026</p>
+                <p style="color: white; font-size: 0.8em; margin-top: 30px;">Centre for Pathogen Genomics, The University of Melbourne</p>
+            </section>
+
+            <!-- Slide 2: Introduction - The Chicken Mystery -->
+            <section>
+                <h2>Introduction - The Chicken Mystery 🐔</h2>
+                <ul>
+                    <li><strong>The Scene:</strong> Chicken samples contaminated with mysterious <em>Salmonella</em> species – can we identify the culprit?</li>
+                    <li><strong>The Challenge:</strong> Traditional methods take days; sequencing gives answers in hours, but how do we analyse the data?</li>
+                    <li><strong>The Journey:</strong> Today you'll become genomic detectives, tracking pathogens from raw DNA sequences to confirmed identification</li>
+                    <li><strong>The Tools:</strong> You'll master both point-and-click platforms (Galaxy, CPG Portal) and powerful command-line techniques</li>
+                </ul>
+            </section>
+
+            <!-- Slide 3: Acknowledgements -->
+            <section>
+                <h2>Acknowledgements 🤝</h2>
+                <ul>
+                    <li><strong>Centre for Pathogen Genomics (CPG)</strong>, <strong>MDU-PHL</strong>, and <strong>The University of Melbourne</strong> for funding and supporting this essential training initiative</li>
+                    <li><strong>Galaxy Training Network</strong> for outstanding open-access materials that democratise bioinformatics education worldwide</li>
+                    <li><strong>Kathmandu University</strong>, <strong>Shubham Biotech Nepal</strong>, and <strong>National Public Health Laboratory, Nepal</strong> as partners in delivering this hands-on training</li>
+                    <li><strong>All participants and contributors</strong> for dedicating time to build genomic surveillance capacity in Nepal</li>
+                </ul>
+            </section>
+
+            <!-- Slide 4: Training Overview -->
+            <section>
+                <h2>Training Overview - Your Learning Journey 🗺️</h2>
+                <ul>
+                    <li><strong>Dataset:</strong> Real-world Oxford Nanopore sequencing from chicken samples spiked with two <em>Salmonella</em> subspecies (<em>enterica</em> and <em>houtenae</em>)</li>
+                    <li><strong>Learning Objectives:</strong> Quality control, read processing, taxonomic profiling, genome assembly, and antimicrobial resistance detection</li>
+                    <li><strong>Three Approaches:</strong> Galaxy (web-based, beginner-friendly), CLI (command-line, powerful and reproducible), CPG Portal (integrated platform)</li>
+                    <li><strong>Hands-On Philosophy:</strong> You'll process actual data, troubleshoot real problems, and make genuine analytical decisions</li>
+                </ul>
+            </section>
+
+            <!-- Slide 5: Galaxy - Your Genomics Laboratory -->
+            <section data-background-color="#fdf6e3">
+                <h2>Galaxy - Your Genomics Laboratory in a Browser 🌌</h2>
+                <ul>
+                    <li><strong>What is Galaxy?</strong> Web-based platform requiring zero installation – analyse data from anywhere with just your browser</li>
+                    <li><strong>Why Start Here?</strong> Visual workflow builder, automatic parameter documentation, and built-in tutorials make complex analyses approachable</li>
+                    <li><strong>Our Workflow:</strong> Upload FASTQ files → Quality control (FastQC, NanoPlot) → Filter reads (Porechop, Fastp) → Identify pathogens (Kraken2) → Visualise results (Krona)</li>
+                    <li><strong>The Power:</strong> Click-based interface backed by the same robust tools used in command-line analysis – simplicity without sacrifice</li>
+                </ul>
+            </section>
+
+            <!-- Slide 6: Galaxy Workflow -->
+            <section data-background-color="#fdf6e3">
+                <h2>Galaxy Workflow - From Reads to Results 📊</h2>
+                <ul>
+                    <li><strong>Step 1 - Data Upload:</strong> Import your Barcode10 and Barcode11 samples directly from Zenodo into your Galaxy workspace</li>
+                    <li><strong>Step 2 - Quality Assessment:</strong> FastQC and MultiQC generate comprehensive reports showing read length, quality scores, and potential issues</li>
+                    <li><strong>Step 3 - Read Processing:</strong> Porechop removes adapter sequences, Fastp filters low-quality reads – typically retaining 70%+ of good data</li>
+                    <li><strong>Step 4 - Pathogen ID:</strong> Kraken2 with BabyKraken database identifies <em>Salmonella</em> species in minutes; Krona creates interactive visualisation charts</li>
+                </ul>
+            </section>
+
+            <!-- Slide 7: Galaxy Advantages -->
+            <section data-background-color="#fdf6e3">
+                <h2>Galaxy Advantages - Learning by Doing ✅</h2>
+                <ul>
+                    <li><strong>Reproducibility:</strong> Every analysis automatically saved as a shareable workflow you can rerun or publish</li>
+                    <li><strong>Transparency:</strong> Each tool shows exactly what parameters were used, eliminating "black box" syndrome</li>
+                    <li><strong>Community Support:</strong> Galaxy Training Network tutorials guide you step-by-step through pathogen detection workflows</li>
+                    <li><strong>Transition Ready:</strong> Skills learned in Galaxy translate directly to understanding command-line equivalents</li>
+                </ul>
+            </section>
+
+            <!-- Slide 8: Command-Line Interface -->
+            <section data-background-color="#2c3e50">
+                <h2 style="color: white;">Command-Line Interface - Unleashing Computational Power 💻</h2>
+                <ul style="color: white;">
+                    <li><strong>Why CLI?</strong> Process hundreds of samples with a single command, automate repetitive tasks, and access the full power of bioinformatics tools</li>
+                    <li><strong>The Learning Curve:</strong> Initially steeper than Galaxy, but exponentially more powerful for large-scale analyses and custom workflows</li>
+                    <li><strong>Your Foundation:</strong> Linux basics (navigating directories, creating files, using pipes), Conda environments for tool management</li>
+                    <li><strong>The Payoff:</strong> Reproducible scripts, parallel processing, integration with high-performance computing clusters</li>
+                </ul>
+            </section>
+
+            <!-- Slide 9: CLI Workflow -->
+            <section data-background-color="#2c3e50">
+                <h2 style="color: white;">CLI Workflow - The Same Analysis, Supercharged ⚡</h2>
+                <ul style="color: white;">
+                    <li><strong>Environment Setup:</strong> <code style="background: #34495e; padding: 2px 6px;">conda activate pathogen_detection</code> loads all required tools (FastQC, Kraken2, Fastp, etc.) in one isolated environment</li>
+                    <li><strong>Parallel Processing:</strong> <code style="background: #34495e; padding: 2px 6px;">parallel</code> command runs FastQC on all samples simultaneously – what takes 20 minutes sequentially finishes in 2</li>
+                    <li><strong>Scripting Power:</strong> Create <code style="background: #34495e; padding: 2px 6px;">reads_paths.tab</code> file once, then pipe it through FastQC → Porechop → Fastp → Kraken2 automatically</li>
+                    <li><strong>Quality Control:</strong> MultiQC aggregates reports from all steps into one comprehensive HTML – compare raw vs. processed data instantly</li>
+                </ul>
+            </section>
+
+            <!-- Slide 10: CLI Hands-On -->
+            <section data-background-color="#2c3e50">
+                <h2 style="color: white;">CLI Hands-On - Taxonomic Profiling 🔬</h2>
+                <ul style="color: white;">
+                    <li><strong>BabyKraken Database:</strong> Lightweight 11 MB database optimised for bacterial pathogens – perfect for learning and rapid screening</li>
+                    <li><strong>Kraken2 Classification:</strong> Assigns taxonomic labels using exact k-mer matches, processing thousands of reads per second</li>
+                    <li><strong>Krona Visualisation:</strong> Interactive hierarchical pie charts let you explore results from domain → phylum → genus → species</li>
+                    <li><strong>Standard Database Option:</strong> For comprehensive analyses, upgrade to 16 GB standard database capturing broader microbial diversity</li>
+                </ul>
+            </section>
+
+            <!-- Slide 11: CLI Advantages -->
+            <section data-background-color="#2c3e50">
+                <h2 style="color: white;">CLI Advantages - Professional Workflows 🏆</h2>
+                <ul style="color: white;">
+                    <li><strong>Reproducibility:</strong> Save every command in a script – share with colleagues, rerun months later, publish in methods sections</li>
+                    <li><strong>Scalability:</strong> Analyse 2 samples or 200 samples with identical effort; just add more compute resources</li>
+                    <li><strong>Flexibility:</strong> Customise parameters, chain tools in novel ways, integrate custom scripts – you're in complete control</li>
+                    <li><strong>Industry Standard:</strong> Most genomic surveillance labs, reference facilities, and research groups use CLI-based pipelines</li>
+                </ul>
+            </section>
+
+            <!-- Slide 12: CPG Portal -->
+            <section data-background-color="#e8f4f8">
+                <h2>CPG Portal - Integrated Genomic Surveillance 🔐</h2>
+                <ul>
+                    <li><strong>What is CPG Portal?</strong> Specialised platform developed by Centre for Pathogen Genomics for pathogen genomics and surveillance</li>
+                    <li><strong>Integrated Approach:</strong> Combines data upload, automated analysis pipelines, visualisation, and collaborative features in one secure portal</li>
+                    <li><strong>Your Access:</strong> Register at <code>portal.cpg.unimelb.edu.au</code> – free accounts available for training and academic use</li>
+                    <li><strong>The Vision:</strong> Streamline pathogen detection workflows while maintaining the power and flexibility of command-line tools underneath</li>
+                </ul>
+            </section>
+
+            <!-- Slide 13: CPG Portal Capabilities -->
+            <section data-background-color="#e8f4f8">
+                <h2>CPG Portal Capabilities 🌟</h2>
+                <ul>
+                    <li><strong>Automated Pipelines:</strong> Pre-configured workflows for common pathogen detection tasks – upload data and receive results</li>
+                    <li><strong>Secure Data Management:</strong> Patient and clinical data handled with appropriate security and privacy protections</li>
+                    <li><strong>Collaborative Features:</strong> Share results with colleagues, annotate findings, track outbreak investigations</li>
+                    <li><strong>Integration Ready:</strong> Connects with laboratory information systems, public health databases, and reporting tools</li>
+                </ul>
+            </section>
+
+            <!-- Slide 14: Comparing the Three Approaches -->
+            <section>
+                <h2>Comparing the Three Approaches ⚖️</h2>
+                <ul>
+                    <li><strong>Galaxy:</strong> Best for learning, teaching, one-off analyses, and when you need transparent, shareable workflows</li>
+                    <li><strong>CLI:</strong> Best for high-throughput processing, automation, custom analyses, and when you need maximum flexibility</li>
+                    <li><strong>CPG Portal:</strong> Best for routine surveillance, clinical diagnostics, collaborative investigations, and integrated data management</li>
+                    <li><strong>The Strategy:</strong> Master Galaxy for concepts, learn CLI for power, use CPG Portal for operational deployment</li>
+                </ul>
+            </section>
+
+            <!-- Slide 15: The Real-World Detection Story -->
+            <section data-background-color="#fff3cd">
+                <h2>The Real-World Detection Story 🕵️</h2>
+                <ul>
+                    <li><strong>Our Samples:</strong> Barcode10 contains <em>Salmonella enterica</em> subsp. <em>enterica</em>; Barcode11 contains subsp. <em>houtenae</em></li>
+                    <li><strong>The Analysis:</strong> Quality control reveals 70%+ high-quality reads; Kraken2 correctly identifies both <em>Salmonella</em> species</li>
+                    <li><strong>The Proof:</strong> Krona visualisations show dominant <em>Salmonella</em> peaks; optional assembly and AMR detection confirm the findings</li>
+                    <li><strong>The Impact:</strong> What took 3-5 days with culture-based methods now completes in 2-4 hours from sample to answer</li>
+                </ul>
+            </section>
+
+            <!-- Slide 16: Wrap-Up -->
+            <section>
+                <h2>Wrap-Up - What You've Accomplished 🎯</h2>
+                <ul>
+                    <li><strong>Skills Acquired:</strong> Quality control, read processing, taxonomic profiling, and interpretation of nanopore sequencing data</li>
+                    <li><strong>Three Platforms Mastered:</strong> Galaxy for accessibility, CLI for power, CPG Portal for integration</li>
+                    <li><strong>Real-World Ready:</strong> You've analysed actual outbreak investigation data using production-grade tools</li>
+                    <li><strong>Continuing Journey:</strong> These foundational skills prepare you for genome assembly, AMR detection, phylogenetics, and beyond</li>
+                </ul>
+            </section>
+
+            <!-- Slide 17: Next Steps -->
+            <section>
+                <h2>Next Steps - Building Your Expertise 🚀</h2>
+                <ul>
+                    <li><strong>Advanced Modules:</strong> Genome assembly with Flye, polishing with Medaka, AMR detection with ABRicate – all optional tutorials available</li>
+                    <li><strong>Practice Datasets:</strong> Explore Galaxy Training Network tutorials for <em>Listeria</em>, <em>E. coli</em>, and other foodborne pathogens</li>
+                    <li><strong>Your Own Data:</strong> Apply these workflows to local surveillance samples, outbreak investigations, or research projects</li>
+                    <li><strong>Community Engagement:</strong> Join Galaxy community forums, share workflows, contribute to open science</li>
+                </ul>
+            </section>
+
+            <!-- Slide 18: Resources and Support -->
+            <section>
+                <h2>Resources and Support 📚</h2>
+                <ul>
+                    <li><strong>Training Materials:</strong> All documentation, scripts, and tutorials available at <code>github.com/himal2007/cpg-bioinformatics-nepal-feb2026</code></li>
+                    <li><strong>Galaxy Training:</strong> <code>training.galaxyproject.org</code> offers hundreds of free tutorials across all bioinformatics domains</li>
+                    <li><strong>CPG Portal Support:</strong> Documentation and help desk available through <code>portal.cpg.unimelb.edu.au</code></li>
+                    <li><strong>Command-Line References:</strong> Linux Journey, Explain Shell, and Conda documentation linked in course materials</li>
+                </ul>
+            </section>
+
+            <!-- Slide 19: Questions and Discussion -->
+            <section>
+                <h2>Questions and Discussion 💬</h2>
+                <ul>
+                    <li><strong>What challenges did you encounter</strong> during the analyses, and how did you troubleshoot them?</li>
+                    <li><strong>Which platform (Galaxy, CLI, CPG Portal)</strong> feels most comfortable for your future work, and why?</li>
+                    <li><strong>How might you apply these skills</strong> to ongoing or planned pathogen surveillance projects in Nepal?</li>
+                    <li><strong>What additional training topics</strong> would support your genomic epidemiology goals?</li>
+                </ul>
+            </section>
+
+            <!-- Slide 20: Thank You -->
+            <section data-background-gradient="linear-gradient(to bottom, #4e54c8, #8f94fb)">
+                <h1 style="color: white;">Thank You! 🙏</h1>
+                <h2 style="color: white;">Happy Learning! 🧬🔬💻</h2>
+                <div style="margin-top: 50px; color: white;">
+                    <p><strong>Centre for Pathogen Genomics</strong></p>
+                    <p>The University of Melbourne</p>
+                    <p style="margin-top: 30px; font-size: 0.9em;">
+                        🌐 Repository: <code>github.com/himal2007/cpg-bioinformatics-nepal-feb2026</code><br>
+                        📜 Licence: CC BY 4.0
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            progress: true,
+            controls: true,
+            center: true,
+            touch: true,
+            loop: false,
+            rtl: false,
+            navigationMode: 'default',
+            help: true,
+            showNotes: false,
+            autoPlayMedia: null,
+            preloadIframes: null,
+            mouseWheel: false,
+            hideInactiveCursor: true,
+            hideCursorTime: 5000
+        });
+    </script>
+</body>
+</html>
