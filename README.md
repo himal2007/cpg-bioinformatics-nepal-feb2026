@@ -37,7 +37,7 @@ If you want to use command-line tools, please ensure you have access to a Unix-b
 
 1. **Install WSL** (Windows users): Follow [WSL installation guide](docs/01-wsl-installation.md)
 2. **Setup Conda Environment**: Follow [`conda` setup guide](docs/02-conda-environment-setup.md)
-3. **Download data and databases**: Follow [Data Download Guide](docs/03-data-download.md)
+3. **Download data and databases**: Follow [Data download guide](docs/03-data-download.md)
 
 ## Precourse material - read/watch at your leisure 
 
@@ -52,6 +52,14 @@ Optional Videos to watch before the course starts:
 Optional Publication to read:
 - [Twenty years of bacterial genome sequencing](https://www.nature.com/articles/nrmicro3565) - Discusses the history of sequencing technology
 - [So you want to be a computational biologist?](https://www.nature.com/articles/nbt.2740) - Advice by two bioinformaticians
+
+## Workshop schedule/materials
+
+1. [Introduction to Galaxy for Bioinformatics](https://training.galaxyproject.org/training-material/topics/microbiome/tutorials/pathogen-detection-from-nanopore-foodborne-data/tutorial.html#pathogen-detection-from-direct-nanopore-sequencing-data-using-ga)
+2. [Basic Linux command-line skills for bioinformatics](docs/01-linux-cli-introduction.md)
+3. [QC, data preprocessing, and taxonomic profiling of nanopore sequencing data](tutorials/01-QC-read-processing.md)
+4. _Genome assembly and polishing of bacterial genomes from nanopore data_
+5. _**AMR profiling from genome assemblies**_
 
 ## Acknowledgments
 
