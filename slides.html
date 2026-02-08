@@ -41,7 +41,7 @@
                 <h2>Introduction - The Chicken Mystery 🐔</h2>
                 <ul>
                     <li><strong>The Scene:</strong> Chicken samples contaminated with mysterious <em>Salmonella</em> species – can we identify the culprit?</li>
-                    <li><strong>The Challenge:</strong> Traditional methods take days; sequencing gives answers in hours, but how do we analyse the data?</li>
+                    <li><strong>The Challenge:</strong> Traditional methods take days; sequencing gives comprehensive answers in hours, but how do we analyse the data?</li>
                     <li><strong>The Journey:</strong> Today you'll become genomic detectives, tracking pathogens from raw DNA sequences to confirmed identification</li>
                     <li><strong>The Tools:</strong> You'll master both point-and-click platforms (Galaxy, CPG Portal) and powerful command-line techniques</li>
                 </ul>
@@ -64,14 +64,14 @@
                 <ul>
                     <li><strong>Dataset:</strong> Real-world Oxford Nanopore sequencing from chicken samples spiked with two <em>Salmonella</em> subspecies (<em>enterica</em> and <em>houtenae</em>)</li>
                     <li><strong>Learning Objectives:</strong> Quality control, read processing, taxonomic profiling, genome assembly, and antimicrobial resistance detection</li>
-                    <li><strong>Three Approaches:</strong> Galaxy (web-based, beginner-friendly), CLI (command-line, powerful and reproducible), CPG Portal (integrated platform)</li>
+                    <li><strong>Two Approaches:</strong> Galaxy and CPG (web-based, beginner-friendly), and CLI (command-line, powerful and reproducible) </li>
                     <li><strong>Hands-On Philosophy:</strong> You'll process actual data, troubleshoot real problems, and make genuine analytical decisions</li>
                 </ul>
             </section>
 
             <!-- Slide 5: Galaxy - Your Genomics Laboratory -->
             <section data-background-color="#fdf6e3">
-                <h2>Galaxy - Your Genomics Laboratory in a Browser 🌌</h2>
+                <h2>Galaxy - Bioinformatics in a Browser 🌌</h2>
                 <ul>
                     <li><strong>What is Galaxy?</strong> Web-based platform requiring zero installation – analyse data from anywhere with just your browser</li>
                     <li><strong>Why Start Here?</strong> Visual workflow builder, automatic parameter documentation, and built-in tutorials make complex analyses approachable</li>
@@ -120,7 +120,6 @@
                     <li><strong>Environment Setup:</strong> <code style="background: #34495e; padding: 2px 6px;">conda activate pathogen_detection</code> loads all required tools (FastQC, Kraken2, Fastp, etc.) in one isolated environment</li>
                     <li><strong>Parallel Processing:</strong> <code style="background: #34495e; padding: 2px 6px;">parallel</code> command runs FastQC on all samples simultaneously – what takes 20 minutes sequentially finishes in 2</li>
                     <li><strong>Scripting Power:</strong> Create <code style="background: #34495e; padding: 2px 6px;">reads_paths.tab</code> file once, then pipe it through FastQC → Porechop → Fastp → Kraken2 automatically</li>
-                    <li><strong>Quality Control:</strong> MultiQC aggregates reports from all steps into one comprehensive HTML – compare raw vs. processed data instantly</li>
                 </ul>
             </section>
 
@@ -148,44 +147,21 @@
 
             <!-- Slide 12: CPG Portal -->
             <section data-background-color="#e8f4f8">
-                <h2>CPG Portal - Integrated Genomic Surveillance 🔐</h2>
+                <h2>CPG Portal </h2>
                 <ul>
                     <li><strong>What is CPG Portal?</strong> Specialised platform developed by Centre for Pathogen Genomics for pathogen genomics and surveillance</li>
                     <li><strong>Integrated Approach:</strong> Combines data upload, automated analysis pipelines, visualisation, and collaborative features in one secure portal</li>
                     <li><strong>Your Access:</strong> Register at <code>portal.cpg.unimelb.edu.au</code> – free accounts available for training and academic use</li>
-                    <li><strong>The Vision:</strong> Streamline pathogen detection workflows while maintaining the power and flexibility of command-line tools underneath</li>
                 </ul>
             </section>
 
-            <!-- Slide 13: CPG Portal Capabilities -->
-            <section data-background-color="#e8f4f8">
-                <h2>CPG Portal Capabilities 🌟</h2>
-                <ul>
-                    <li><strong>Automated Pipelines:</strong> Pre-configured workflows for common pathogen detection tasks – upload data and receive results</li>
-                    <li><strong>Secure Data Management:</strong> Patient and clinical data handled with appropriate security and privacy protections</li>
-                    <li><strong>Collaborative Features:</strong> Share results with colleagues, annotate findings, track outbreak investigations</li>
-                    <li><strong>Integration Ready:</strong> Connects with laboratory information systems, public health databases, and reporting tools</li>
-                </ul>
-            </section>
-
-            <!-- Slide 14: Comparing the Three Approaches -->
-            <section>
-                <h2>Comparing the Three Approaches ⚖️</h2>
-                <ul>
-                    <li><strong>Galaxy:</strong> Best for learning, teaching, one-off analyses, and when you need transparent, shareable workflows</li>
-                    <li><strong>CLI:</strong> Best for high-throughput processing, automation, custom analyses, and when you need maximum flexibility</li>
-                    <li><strong>CPG Portal:</strong> Best for routine surveillance, clinical diagnostics, collaborative investigations, and integrated data management</li>
-                    <li><strong>The Strategy:</strong> Master Galaxy for concepts, learn CLI for power, use CPG Portal for operational deployment</li>
-                </ul>
-            </section>
-
-            <!-- Slide 15: The Real-World Detection Story -->
+           <!-- Slide 15: The Real-World Detection Story -->
             <section data-background-color="#fff3cd">
                 <h2>The Real-World Detection Story 🕵️</h2>
                 <ul>
                     <li><strong>Our Samples:</strong> Barcode10 contains <em>Salmonella enterica</em> subsp. <em>enterica</em>; Barcode11 contains subsp. <em>houtenae</em></li>
                     <li><strong>The Analysis:</strong> Quality control reveals 70%+ high-quality reads; Kraken2 correctly identifies both <em>Salmonella</em> species</li>
-                    <li><strong>The Proof:</strong> Krona visualisations show dominant <em>Salmonella</em> peaks; optional assembly and AMR detection confirm the findings</li>
+                    <li><strong>The Proof:</strong> Krona visualisations show dominant <em>Salmonella</em> reads; optional assembly and AMR detection confirm the findings</li>
                     <li><strong>The Impact:</strong> What took 3-5 days with culture-based methods now completes in 2-4 hours from sample to answer</li>
                 </ul>
             </section>
@@ -195,7 +171,7 @@
                 <h2>Wrap-Up - What You've Accomplished 🎯</h2>
                 <ul>
                     <li><strong>Skills Acquired:</strong> Quality control, read processing, taxonomic profiling, and interpretation of nanopore sequencing data</li>
-                    <li><strong>Three Platforms Mastered:</strong> Galaxy for accessibility, CLI for power, CPG Portal for integration</li>
+                    <li><strong>Three Platforms:</strong> Galaxy for accessibility, CLI for power, CPG Portal for integration</li>
                     <li><strong>Real-World Ready:</strong> You've analysed actual outbreak investigation data using production-grade tools</li>
                     <li><strong>Continuing Journey:</strong> These foundational skills prepare you for genome assembly, AMR detection, phylogenetics, and beyond</li>
                 </ul>
@@ -208,7 +184,7 @@
                     <li><strong>Advanced Modules:</strong> Genome assembly with Flye, polishing with Medaka, AMR detection with ABRicate – all optional tutorials available</li>
                     <li><strong>Practice Datasets:</strong> Explore Galaxy Training Network tutorials for <em>Listeria</em>, <em>E. coli</em>, and other foodborne pathogens</li>
                     <li><strong>Your Own Data:</strong> Apply these workflows to local surveillance samples, outbreak investigations, or research projects</li>
-                    <li><strong>Community Engagement:</strong> Join Galaxy community forums, share workflows, contribute to open science</li>
+                    <li><strong>Community Engagement:</strong> Join community forums, share workflows, contribute to open science</li>
                 </ul>
             </section>
 
@@ -218,7 +194,6 @@
                 <ul>
                     <li><strong>Training Materials:</strong> All documentation, scripts, and tutorials available at <code>github.com/himal2007/cpg-bioinformatics-nepal-feb2026</code></li>
                     <li><strong>Galaxy Training:</strong> <code>training.galaxyproject.org</code> offers hundreds of free tutorials across all bioinformatics domains</li>
-                    <li><strong>CPG Portal Support:</strong> Documentation and help desk available through <code>portal.cpg.unimelb.edu.au</code></li>
                     <li><strong>Command-Line References:</strong> Linux Journey, Explain Shell, and Conda documentation linked in course materials</li>
                 </ul>
             </section>
