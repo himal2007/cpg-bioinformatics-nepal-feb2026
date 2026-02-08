@@ -56,7 +56,7 @@ Optional Publication to read:
 ## Workshop schedule/materials
 
 1. [Introduction to Galaxy for Bioinformatics](https://training.galaxyproject.org/training-material/topics/microbiome/tutorials/pathogen-detection-from-nanopore-foodborne-data/tutorial.html#pathogen-detection-from-direct-nanopore-sequencing-data-using-ga)
-2. [Basic Linux command-line skills for bioinformatics](docs/01-linux-cli-introduction.md)
+2. [Basic Linux command-line skills for bioinformatics](docs/04-linux-cli-introduction.md)
 3. [QC, data preprocessing, and taxonomic profiling of nanopore sequencing data](tutorials/01-QC-read-processing.md)
 4. _Genome assembly and polishing of bacterial genomes from nanopore data_
 5. _**AMR profiling from genome assemblies**_
