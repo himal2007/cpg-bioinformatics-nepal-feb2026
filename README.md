@@ -61,11 +61,12 @@ Optional Publication to read:
 4. _Genome assembly and polishing of bacterial genomes from nanopore data_
 5. _**AMR profiling from genome assemblies**_
 
-## Training lecture zoom sessions - NPHL
+## Training lecture zoom sessions - NPHL (11-16th Feb)
 
-Join from PC, Mac, iOS or Android: [zoom link](https://unimelb.zoom.us/j/84078745303?pwd=JlG7X57vbG6HbWdoI2dXnbBs19WKif.1)  Password: `052674` 
+**!!!IMPORTANT!!!**
+Join from PC, Mac, iOS or Android: [**zoom link**](https://unimelb.zoom.us/j/84078745303?pwd=JlG7X57vbG6HbWdoI2dXnbBs19WKif.1)  **Password**: `052674` 
 
-Download [full program schedule here](docs/schedule-NPHL.pdf)
+**Download** [**full program schedule here**](docs/schedule-NPHL.pdf)
 
 ## Acknowledgments
 
