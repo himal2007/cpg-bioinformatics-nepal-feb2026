@@ -82,7 +82,7 @@ conda env config vars list
 
 7. Setup DBs
 
-i. `kraken2` database
+  i. `kraken2` database
 
 ```sh
 # make kraken directory
@@ -111,7 +111,7 @@ conda activate cpgih_utility
 conda env config vars list
 ```
 
-ii. `emu` database
+  ii. `emu` database
 
 ```sh
 # make emu directory
