@@ -1,6 +1,6 @@
-## Install with Windows
+## Setting up environment for ONT QC
 
-1. Use `WSL` to run `unix` (you don't need this for mac or linux OS's)
+### Use `WSL` to run `unix` (for windows, you don't need this for mac or linux OS's)
 
 ```sh
 wsl --install
@@ -8,7 +8,7 @@ wsl.exe -d Ubuntu
 # set username and password
 ```
 
-2. Install `conda`
+### Step 1: Install `conda`
 
 ```sh
 # make directory
@@ -33,14 +33,14 @@ source ~/miniconda3/bin/activate
 conda init --all
 ```
 
-3. Log in to unix environment after closing PowerShell (you don't need this for Mac or linux OS's)
+### Step 2: Log in to unix environment after closing PowerShell (you don't need this for Mac or linux OS's)
 
 ```sh
 # Unix user account: 
 # password: 
 ```
 
-4. Create directory to store repository locally
+### Step 3: Create directory to store repository locally
 
 ```sh
 mkdir ~/Tools/
@@ -50,7 +50,7 @@ git clone https://github.com/centre-pathogen-genomics/CPGIH_Utility.git ~/Tools/
 ## OR PUT /CPGIH_Utility/ INTO FOLDER FROM HARD DRIVE
 ```
 
-5. Create conda environment into which you will install the software
+### Step 4: Create conda environment into which you will install the software
 
 ```sh
 conda create -n cpgih_utility -y
@@ -64,7 +64,8 @@ conda install anaconda::gawk
 
 ```
 
-6. Update `$BRIDGE_SCRIPT_DIR` and `$BRIDGE_WORKING_DIR`. These two variables need to be set to the local directory of the CPGIH_Utility repo scripts directory and the working directory of the machine respectively.
+### Step 5: Update `$BRIDGE_SCRIPT_DIR` and `$BRIDGE_WORKING_DIR`. These two variables need to be set to the local directory of the CPGIH_Utility repo scripts directory and the working directory of the machine respectively.
+
 eg. `BRIDGE_SCRIPT_DIR=/home/cpgih/Tools/CPGIH_Utility/Scripts` and `BRIDGE_WORKING_DIR=/mnt/c/Users/charl/OneDrive/Desktop`.
 
 ```sh
@@ -80,9 +81,9 @@ conda activate cpgih_utility
 conda env config vars list
 ```
 
-7. Setup DBs
+### Step 6: Setup DBs
 
-  i. `kraken2` database
+#### i. `kraken2` database
 
 ```sh
 # make kraken directory
@@ -111,7 +112,7 @@ conda activate cpgih_utility
 conda env config vars list
 ```
 
-  ii. `emu` database
+####  ii. `emu` database
 
 ```sh
 # make emu directory
@@ -134,7 +135,7 @@ tar -xvf emu.tar
 rm emu.tar
 ```
 
-8. Reload tools after update
+### Step 7: Reload tools after update
 
 ```sh
 # login to wsl and change location
@@ -151,7 +152,7 @@ mkdir ~/Tools/
 git clone https://github.com/centre-pathogen-genomics/CPGIH_Utility.git ~/Tools/CPGIH_Utility
 ```
 
-9. Wrapper scripts setup
+### Step 8: Wrapper scripts setup
 
 ```sh
 # Wraps both illumina_genomesqc.sh, ont_genomesqc.sh as command line application
@@ -162,7 +163,7 @@ echo 'export PATH=$PATH:[REPO_PATH]/Scripts' | tee -a ~/.bashrc >> ~/.zshrc
 eg. `echo 'export PATH=$PATH:/home/cpgih/Tools/CPGIH_Utility/Scripts' | tee -a ~/.bashrc >> ~/.zshrc
 ```
 
-10. HOW TO CHANGE THE FILE LOCATION WITH THE WRAPPER SCRIPT
+### Step 9: How to change the file location with the wrapper script?
 
 You can change the path to your input files by running this code again and changing the location
 
