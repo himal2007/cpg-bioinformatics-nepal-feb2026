@@ -2,7 +2,6 @@
 
 ```sh
 # login to unix environment in powershell (in windows)
-
 wsl
 
 # activate conda environment
@@ -15,7 +14,7 @@ In this folder, you will have a folder called 'fastq_pass', in which there will 
 
 Edit the `RENAMING.TSV` FILE (saved to share_file_templates directory on the desktop) to have the list of all the samples to be analysed (one per line) 
 
-The format is 'barcode## TAB samplename' MAKE SURE THE SEPARATOR IS A TAB - example:
+The format is `barcode## TAB samplename` MAKE SURE THE SEPARATOR IS A TAB - example:
 
 ```sh
 barcode25	Sample01
