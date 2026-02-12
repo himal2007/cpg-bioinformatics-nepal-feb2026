@@ -63,10 +63,14 @@ Optional Publication to read:
 
 ## Training lecture zoom sessions - NPHL (11-16th Feb)
 
-**!!!IMPORTANT!!!**
 Join from PC, Mac, iOS or Android: [**zoom link**](https://unimelb.zoom.us/j/84078745303?pwd=JlG7X57vbG6HbWdoI2dXnbBs19WKif.1)  **Password**: `052674` 
 
-**Download** [**full program schedule here**](docs/schedule-NPHL.pdf)
+**Download** full program schedule [ here](docs/schedule-NPHL.pdf)
+
+## CPG ONT QC guidelines
+
+1. [Setting up your PC for ONT QC analysis](docs/05-setup-cpg-ont-qc.md)
+2. [Running ONT QC with the CPG guidelines](docs/06-run-cpg-ont-qc.md)
 
 ## Acknowledgments
 
